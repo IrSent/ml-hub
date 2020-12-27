@@ -30,7 +30,7 @@ MLHub is based on [JupyterHub](https://github.com/jupyterhub/jupyterhub) with co
 ## Highlights
 
 - 💫 Create, manage, and access Jupyter notebooks. Use it as an admin to distribute workspaces to other users, use it in self-service mode, or both.
-- 🖊️ Set configuration parameters such as CPU-limits for started workspaces. 
+- 🖊️ Set configuration parameters such as CPU-limits for started workspaces.
 - 🖥 Access additional tools within the started workspaces by having secured routes.
 - 🎛 Tunnel SSH connections to workspace containers.
 - 🐳 Focused on Docker and Kubernetes with enhanced functionality.
@@ -136,6 +136,16 @@ Here are the additional environment variables for the hub:
         </td>
         <td>3600 <div>(currently disabled in Kubernetes)</div></td>
     </tr>
+    <tr>
+        <td>CLEANUP_SERVICE_ENABLED</td>
+        <td>Enables a Hub-Managed Cleanup Service. More details on topic: <a href="https://jupyterhub.readthedocs.io/en/stable/reference/services.html#launching-a-hub-managed-service">Services: Launching a Hub-Managed Service</a></td>
+        <td>true</td>
+    </tr>
+    <tr>
+        <td>CLEANUP_SERVICE_PORT</td>
+        <td>Bind Hub-Managed Cleanup Service to a specific port.</td>
+        <td>9000</td>
+    </tr>
 </table>
 
 #### JupyterHub Config
@@ -232,7 +242,7 @@ proxy:
         -----END CERTIFICATE-----
 ```
 
-If you use a (cloud provider) LoadBalancer in your cluster where SSL is already terminated, just do not enable SSL on Hub-level and point the LoadBalancer regularly to the Hub's port.  
+If you use a (cloud provider) LoadBalancer in your cluster where SSL is already terminated, just do not enable SSL on Hub-level and point the LoadBalancer regularly to the Hub's port.
 If you do not have a certificate, for example from your cloud provider, you can have a look at the [Let's Encrypt project](https://letsencrypt.org/getting-started/) for how to generate one. For that, your domain must be publicly reachable. It is not built-in the MLHub project, but one idea would be to have a pod that creates & renews certificates for your domain, copying them into the proxy pod and re-starting nginx there.
 
 </details>
@@ -275,7 +285,7 @@ We have the three following scenarios in mind for the hub and want to point them
 
 In this scenario, the idea is that just the admin user exists and can access the hub. The admin user then creates workspaces and distributes them to users.
 
-Go to the admin panel (1) and create a new user (2). 
+Go to the admin panel (1) and create a new user (2).
 You can then start the standard workspace for that user or create a new workspace (see second image).
 Via the ssh access button (3), you can send the user a command to connect to the started workspace via ssh. For more information about the ssh-feature in the workspace, checkout [this documentation section](https://github.com/ml-tooling/ml-workspace#ssh-access). If you created a workspace for another user, it might be necessary to click access on the workspace and authorize once per user to be able to use the ssh-access button.
 A user can also access the UI via ssh-ing into the workspace, printing the API token via `echo $JUPYTERHUB_API_TOKEN`, and then accessing the url of the hub in the browser under `/user/<username>/<workspace-name>/tree?token=<jupyterhub-api-token>`. The `JUPYTERHUB_API_TOKEN` gives access to *all* named servers of a user, so use different users for different persons in this scenario.
@@ -429,7 +439,7 @@ Via the START\_* environment variables you can define what is started within the
 ## Contribution
 
 - Pull requests are encouraged and always welcome. Read [`CONTRIBUTING.md`](https://github.com/ml-tooling/ml-hub/tree/master/CONTRIBUTING.md) and check out [help-wanted](https://github.com/ml-tooling/ml-hub/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+label%3A"help+wanted"+sort%3Areactions-%2B1-desc+) issues.
-- Submit github issues for any [feature enhancements](https://github.com/ml-tooling/ml-hub/issues/new?assignees=&labels=feature-request&template=02_feature-request.md&title=), [bugs](https://github.com/ml-tooling/ml-hub/issues/new?assignees=&labels=bug&template=01_bug-report.md&title=), or [documentation](https://github.com/ml-tooling/ml-hub/issues/new?assignees=&labels=enhancement%2C+docs&template=03_documentation.md&title=) problems. 
+- Submit github issues for any [feature enhancements](https://github.com/ml-tooling/ml-hub/issues/new?assignees=&labels=feature-request&template=02_feature-request.md&title=), [bugs](https://github.com/ml-tooling/ml-hub/issues/new?assignees=&labels=bug&template=01_bug-report.md&title=), or [documentation](https://github.com/ml-tooling/ml-hub/issues/new?assignees=&labels=enhancement%2C+docs&template=03_documentation.md&title=) problems.
 - By participating in this project you agree to abide by its [Code of Conduct](https://github.com/ml-tooling/ml-hub/tree/master/CODE_OF_CONDUCT.md).
 
 ---

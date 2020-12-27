@@ -20,8 +20,8 @@ from subprocess import call
 c = get_config()
 
 # Override the Jupyterhub `normalize_username` function to remove problematic characters from the username - independent from the used authenticator.
-# E.g. when the username is "lastname, firstname" and the comma and whitespace are not removed, they are encoded by the browser, which can lead to broken routing in our nginx proxy, 
-# especially for the tools-part. 
+# E.g. when the username is "lastname, firstname" and the comma and whitespace are not removed, they are encoded by the browser, which can lead to broken routing in our nginx proxy,
+# especially for the tools-part.
 # Everybody who starts the hub can override this behavior the same way we do in a mounted `jupyterhub_user_config.py` (Docker local) or via the `hub.extraConfig` (Kubernetes)
 from jupyterhub.auth import Authenticator
 original_normalize_username = Authenticator.normalize_username
@@ -51,13 +51,13 @@ def dynamic_check_whitelist(self, username, authentication=None):
         # TODO: create the file and warn the user that the user has to go into the hub pod and modify it there
         if not os.path.exists(dynamic_whitelist_file):
             logger.error("The dynamic white list has to be mounted to '{}'. Use standard JupyterHub whitelist behavior.".format(dynamic_whitelist_file))
-        else:  
+        else:
             with open(dynamic_whitelist_file, "r") as f:
                 #whitelisted_users = f.readlines()
                 # rstrip() will remove trailing whitespaces or newline characters
                 whitelisted_users = [line.rstrip() for line in f]
                 return username.lower() in whitelisted_users
-    
+
     return original_check_whitelist(self, username, authentication)
 Authenticator.check_whitelist = dynamic_check_whitelist
 
@@ -116,7 +116,7 @@ c.Spawner.notebook_dir = '/workspace'
 # Connect containers to this Docker network
 c.Spawner.use_internal_ip = True
 
-c.Spawner.prefix = 'ws' 
+c.Spawner.prefix = 'ws'
 c.Spawner.name_template = c.Spawner.prefix + '-{username}-' + ENV_HUB_NAME + '{servername}' # override in your config when you want to have a different name schema. Also consider changing c.Authenticator.username_pattern and check the environment variables to permit ssh connection
 
 # Don't remove containers once they are stopped - persist state
@@ -170,11 +170,11 @@ if ENV_EXECUTION_MODE == utils.EXECUTION_MODE_KUBERNETES:
     SERVICE_HOST_ENV_NAME = "KUBERNETES_SERVICE_HOST"
     SERVICE_PORT_ENV_NAME = "KUBERNETES_SERVICE_PORT"
     service_environment.update({
-        SERVICE_HOST_ENV_NAME: os.getenv(SERVICE_HOST_ENV_NAME), 
+        SERVICE_HOST_ENV_NAME: os.getenv(SERVICE_HOST_ENV_NAME),
         SERVICE_PORT_ENV_NAME: os.getenv(SERVICE_PORT_ENV_NAME)
     })
     service_host = "127.0.0.1" #"hub"
-    
+
 
 elif ENV_EXECUTION_MODE == utils.EXECUTION_MODE_LOCAL:
     # shm_size can only be set for Docker, not Kubernetes (see https://stackoverflow.com/questions/43373463/how-to-increase-shm-size-of-a-kubernetes-container-shm-size-equivalent-of-doc)
@@ -210,13 +210,13 @@ if c.JupyterHub.authenticator_class == NATIVE_AUTHENTICATOR_CLASS:
     #     c.JupyterHub.template_paths = []
     c.JupyterHub.template_paths.append("{}/templates/".format(os.path.dirname(nativeauthenticator.__file__)))
 
-# TODO: add env variable to readme
-if (os.getenv("IS_CLEANUP_SERVICE_ENABLED", "true") == "true"):
+if (os.getenv("CLEANUP_SERVICE_ENABLED", "true") == "true"):
+    service_port = os.getenv("CLEANUP_SERVICE_PORT", 9000)
     c.JupyterHub.services = [
         {
             'name': 'cleanup-service',
             'admin': True,
-            'url': 'http://{}:9000'.format(service_host),
+            'url': 'http://{}:{}'.format(service_host, service_port),
             'environment': service_environment,
             'command': [sys.executable, '/resources/cleanup-service.py']
         }
