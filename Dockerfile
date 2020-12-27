@@ -111,7 +111,7 @@ ADD https://raw.githubusercontent.com/ml-tooling/zero-to-mlhub-k8s/master/images
 ADD resources/kubernetes/jupyterhub_chart_config.py $_RESOURCES_PATH/jupyterhub_chart_config.py
 # Copy the jupyterhub config that has a lot of options to be configured
 
-RUN chmod u+rx /usr/local/bin/cull_idle_servers.py 
+RUN chmod u+rx /usr/local/bin/cull_idle_servers.py
 
 RUN pip3 install oauthenticator psutil yamlreader pyjwt \
          # https://github.com/jupyterhub/kubespawner
@@ -168,10 +168,11 @@ ENV \
    START_JHUB=true \
    START_CHP=false \
    EXECUTION_MODE="local" \
-   HUB_NAME="mlhub" \ 
-   CLEANUP_INTERVAL_SECONDS=3600 \
+   HUB_NAME="mlhub" \
    DYNAMIC_WHITELIST_ENABLED="false" \
-   IS_CLEANUP_SERVICE_ENABLED="true"
+   CLEANUP_INTERVAL_SECONDS=3600 \
+   CLEANUP_SERVICE_ENABLED="true" \
+   CLEANUP_SERVICE_PORT=9001
 
 ### END CONFIGURATION ###
 
@@ -202,7 +203,7 @@ LABEL \
     "org.opencontainers.image.vendor"="ML Tooling" \
     "org.opencontainers.image.authors"="Benjamin Raehtlein & Lukas Masuch" \
     "org.opencontainers.image.revision"=$ARG_VCS_REF \
-    "org.opencontainers.image.created"=$ARG_BUILD_DATE \ 
+    "org.opencontainers.image.created"=$ARG_BUILD_DATE \
     # Label Schema Convention (deprecated): http://label-schema.org/rc1/
     "org.label-schema.name"="Machine Learning Hub" \
     "org.label-schema.description"="Multi-user hub which spawns and manages workspace instances." \
@@ -214,7 +215,7 @@ LABEL \
     "org.label-schema.schema-version"="1.0" \
     "org.label-schema.vcs-ref"=$ARG_VCS_REF \
     "org.label-schema.build-date"=$ARG_BUILD_DATE
-    
+
 ### END LABELS ###
 
 # use global option with tini to kill full process groups: https://github.com/krallin/tini#process-group-killing
@@ -225,4 +226,4 @@ CMD ["/bin/bash", "/resources/docker-entrypoint.sh"]
 
 # The port on which nginx listens and checks whether it's http(s) or ssh traffic
 EXPOSE 8080
- 
+
