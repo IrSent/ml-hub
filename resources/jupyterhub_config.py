@@ -210,7 +210,7 @@ if c.JupyterHub.authenticator_class == NATIVE_AUTHENTICATOR_CLASS:
     #     c.JupyterHub.template_paths = []
     c.JupyterHub.template_paths.append("{}/templates/".format(os.path.dirname(nativeauthenticator.__file__)))
 
-if (os.getenv("CLEANUP_SERVICE_ENABLED", "true") == "true"):
+if (int(os.getenv("CLEANUP_INTERVAL_SECONDS")) > -1):
     service_port = os.getenv("CLEANUP_SERVICE_PORT", 9000)
     c.JupyterHub.services = [
         {

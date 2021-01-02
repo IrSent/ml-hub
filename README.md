@@ -137,13 +137,8 @@ Here are the additional environment variables for the hub:
         <td>3600 <div>(currently disabled in Kubernetes)</div></td>
     </tr>
     <tr>
-        <td>CLEANUP_SERVICE_ENABLED</td>
-        <td>Enables a Hub-Managed Cleanup Service. More details on topic: <a href="https://jupyterhub.readthedocs.io/en/stable/reference/services.html#launching-a-hub-managed-service">Services: Launching a Hub-Managed Service</a></td>
-        <td>true</td>
-    </tr>
-    <tr>
         <td>CLEANUP_SERVICE_PORT</td>
-        <td>Bind Hub-Managed Cleanup Service to a specific port.</td>
+        <td>Bind Hub-Managed Cleanup Service to a specific port. More details on topic: <a href="https://jupyterhub.readthedocs.io/en/stable/reference/services.html#launching-a-hub-managed-service">Services: Launching a Hub-Managed Service</a></td>
         <td>9000</td>
     </tr>
 </table>
